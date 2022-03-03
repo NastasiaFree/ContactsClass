@@ -1,0 +1,69 @@
+body {
+    background-color: beige;
+    max-width: 80%;
+    margin: 0 auto;
+    
+}
+.cont_title {
+    text-align: center;
+    color: rgb(19, 35, 124);
+}
+.cont_form {
+    margin-bottom: 30px;
+    display: flex;
+    justify-content: space-around;  /*изменить адаптив*/
+    flex-wrap: wrap;
+    gap: 10px;
+
+}
+input{
+    border: 2px solid rgb(18, 102, 151);
+    height: 2em;
+}
+.cont_button_submit {
+    height: 2.5em;
+    font-size: 14px;
+    font-weight: bold;
+    color: rgb(19, 35, 124);
+    background-color: rgba(181, 211, 228, 0.507);
+    border: 2px solid rgb(18, 102, 151);
+}
+
+.cont_list {
+    padding: 10px;
+}
+.cont_list_item {
+    margin-bottom: 10px;
+    font-size: 18px;
+    background-color: rgba(141, 180, 212, 0.192);
+    border: 1px solid black;
+    padding: 10px;
+}
+.cont_list_item > div{
+    margin-bottom: 0.5em;
+}
+
+.cont_list_item_edit, 
+.cont_list_item_remove {
+    padding: 5px;
+    width: 50px;
+    color: rgb(19, 35, 124);
+    background-color: rgba(181, 211, 228, 0.507);
+    border: 2px solid rgb(18, 102, 151);
+}
+.cont_list_item_edit {
+    margin-right: 10px;
+}
+
+@media (max-width: 923px) {
+    .cont_form {
+        justify-content: center;
+    }
+}
+
+@media (max-width: 500px) {
+    .cont_form {
+        flex-direction: column;
+        justify-content: center;
+    }
+}
