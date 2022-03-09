@@ -52,6 +52,9 @@ class ContactsApp extends Contacts{  //наследование из базов�
     }
 
     init() {
+        
+
+
         let formContacts = document.createElement('form');
     formContacts.setAttribute('class', 'cont_form');
 
@@ -108,6 +111,19 @@ class ContactsApp extends Contacts{  //наследование из базов�
     formContacts.addEventListener('submit', (e) => {
         this.addContact(e)
     })
+
+    let cookie = this.getCookie('contExp')
+
+    if(!cookie) {
+        this.storage = [];
+    }
+
+    let dataStorage = this.storage;
+        if (dataStorage) {
+            dataStorage.forEach(elem => this.add(elem.data))
+        }
+
+    this.createCont();
     }
 
 
@@ -125,7 +141,15 @@ class ContactsApp extends Contacts{  //наследование из базов�
 
     createCont() {
         this.contList.innerHTML = '';
-        let dataList = this.getContacts()
+        //let dataStorage = this.storage;
+        let dataList = this.getContacts();
+
+        // if(dataStorage) {
+        //     this.contacts = dataStorage;
+        // }
+
+        //let dataList = this.getContacts();
+
         dataList.map(elem => {
             let elemList = document.createElement('li');
             elemList.setAttribute('class', 'cont_list_item');
@@ -181,11 +205,36 @@ class ContactsApp extends Contacts{  //наследование из базов�
             })
         
         })
+
+        this.storage = this.contacts;
+        this.setCookie('contExp', 1, {'max-age':86400})
+    }
+
+    get storage() {
+        let storage = localStorage.getItem('contacts');
+        return JSON.parse(storage)
+    }
+
+    set storage(data) {
+        let dataStorage = JSON.stringify(data)
+        localStorage.setItem('contacts', dataStorage)
     }
 
 
+    
+
+
+
+
+    editCont = function (name, email, address, tel) {
+            name.setAttribute('contenteditable', 'true');
+            email.setAttribute('contenteditable', 'true');
+            address.setAttribute('contenteditable', 'true');
+            tel.setAttribute('contenteditable', 'true')
+        }
+
     saveNote(e, id, name, email, address, tel){
-        if(e.key == 'Enter' && e.ctrlKey){
+        if(e.key == 'Enter'){
             name.setAttribute('contenteditable', 'false');
             email.setAttribute('contenteditable', 'false');
             address.setAttribute('contenteditable', 'false');
@@ -200,6 +249,7 @@ class ContactsApp extends Contacts{  //наследование из базов�
             this.edit(id, data);  //c 37 стр
             console.log(this.contacts)
         }
+        this.storage = this.contacts
     }
 
 
@@ -209,10 +259,39 @@ class ContactsApp extends Contacts{  //наследование из базов�
         //console.log(this.contacts)
     }
 
-    editCont = function (name, email, address, tel) {
-        name.setAttribute('contenteditable', 'true');
-        email.setAttribute('contenteditable', 'true');
-        address.setAttribute('contenteditable', 'true');
-        tel.setAttribute('contenteditable', 'true')
+
+    //Готовое решение куки с https://learn.javascript.ru/cookie
+    getCookie(name) {
+        let matches = document.cookie.match(new RegExp(
+          "(?:^|; )" + 'contExp'.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
+        ));
+        return matches ? decodeURIComponent(matches[1]) : undefined;
     }
+
+
+     setCookie(name, value, options = {}) {
+
+        options = {
+          path: '/',
+          // при необходимости добавьте другие значения по умолчанию
+          ...options
+        };
+      
+        if (options.expires instanceof Date) {
+          options.expires = options.expires.toUTCString();
+        }
+      
+        let updatedCookie = encodeURIComponent(name) + "=" + encodeURIComponent(value);
+      
+        for (let optionKey in options) {
+          updatedCookie += "; " + optionKey;
+          let optionValue = options[optionKey];
+          if (optionValue !== true) {
+            updatedCookie += "=" + optionValue;
+          }
+        }
+      
+        document.cookie = updatedCookie;
+      }
+    
 }
